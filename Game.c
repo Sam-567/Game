@@ -1,5 +1,4 @@
 /*
-*  Git is magic test sam
 *  Game.c
 *  Filled in version of game.h
 */
@@ -62,9 +61,6 @@
 #include <assert.h>
 #include <malloc.h>
 #include <string.h>
-
-
-// My name is game.c please work
 
 
 typedef struct _game * Game;
@@ -212,7 +208,23 @@ int getMostARCs (Game g);
  
 // which university currently has the prestige award for the most pubs?
 // this is NO_ONE until the first publication is made.
-int getMostPublications (Game g);
+int getMostPublications (Game g){
+	int MostPublications = 0;
+	int UniWithMost = 0;
+	int i = 1;
+	while (i<= NUM_UNIS) {
+		int publications = publications[i];
+
+		if (publications < MostPublications) {
+			MostPublications = publications;
+			UniWithMost = i;
+		} else if (publications == MostPublications){
+			UniWithMost = 0;
+		}
+		i++;
+	}
+	return UniWithMost;
+}
  
 // return the current turn number of the game -1,0,1, ..
 int getTurnNumber (Game g){
