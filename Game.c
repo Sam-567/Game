@@ -64,7 +64,8 @@
 #include <string.h>
 
 
-// My name is game.c
+// My name is game.c please work
+
 
 typedef struct _game * Game;
 
