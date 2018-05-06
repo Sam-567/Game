@@ -1,7 +1,7 @@
 /*
+*  Git is magic
 *  Game.c
 *  Filled in version of game.h
-*  TESTING GIT
 */
  
 #define NUM_UNIS 3
