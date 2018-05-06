@@ -1,5 +1,5 @@
 /*
-*  Git is magic
+*  Git is magic test sam
 *  Game.c
 *  Filled in version of game.h
 */
