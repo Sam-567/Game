@@ -63,6 +63,9 @@
 #include <malloc.h>
 #include <string.h>
 
+
+// My name is game.c
+
 typedef struct _game * Game;
 
 typedef struct _game {
