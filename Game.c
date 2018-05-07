@@ -78,6 +78,7 @@ typedef struct _game {
     int angledArcs[NUM_ANGLED_ARCS];
 } game;
 
+// This is a change to demonstrate GitHub
  
 // a path is a sequence of L=left R=right B=back steps
 // starting from the initial campus of player 1 / A at the top

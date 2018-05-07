@@ -58,9 +58,14 @@ void testTurn(void){
    disposeGame(g);
 }
 
+
+
+
 Game makeDefaultGame(void){
    int disciplines[] = DEFAULT_DISCIPLINES;
    int dice[] = DEFAULT_DICE;
    Game g = newGame (disciplines, dice);
    return g;
 }
+
+// HOW NEAT IS THIS RIGHT?
