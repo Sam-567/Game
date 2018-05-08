@@ -5,7 +5,6 @@
  
 
 #define NUM_OF_HEXAGONS 19
-#define NUM_PLAYERS 3
 #define NUM_DISCIPLINES 6
 #define NUM_ANGLED_ARCS 44
 #define NUM_VERTICAL_ARCS 24
@@ -24,10 +23,10 @@ typedef struct _game {
     int disciplines[NUM_OF_HEXAGONS];
     int rollNeeded[NUM_OF_HEXAGONS];
     int turnCount;
-    int KPIpoints[NUM_PLAYERS];
-    int patents[NUM_PLAYERS];
-    int publications[NUM_PLAYERS];
-    int students[NUM_PLAYERS][NUM_DISCIPLINES];
+    int KPIpoints[NUM_UNIS];
+    int patents[NUM_UNIS];
+    int publications[NUM_UNIS];
+    int students[NUM_UNIS][NUM_DISCIPLINES];
     int currentRoll;
     int verticalArcs[NUM_VERTICAL_ARCS];
     int angledArcs[NUM_ANGLED_ARCS];
@@ -48,7 +47,8 @@ void disposeGame (Game g){
 }
  
 void makeAction (Game g, action a){
-   
+   assert(isLegalAction (g, a) == TRUE);
+
    int move = a.actionCode;
    int player = getWhoseTurn(g);
    assert(player > 0);
@@ -82,7 +82,7 @@ void throwDice (Game g, int diceScore){
    //Turning all MTV and M$ students to ThDs
    if(diceScore == 7){
       int i = 1;
-      while(i <= NUM_PLAYERS){
+      while(i <= NUM_UNIS){
          int numMMoney = g->students[i][STUDENT_MMONEY];
          int numMTV = g->students[i][STUDENT_MTV];
 
@@ -109,15 +109,11 @@ void exchangeStudents(Game g, int player, action a, int exchangeRate){
 } 
 /* **** Functions which GET data about the game aka GETTERS **** */
  
-// what type of students are produced by the specified region?
-// regionID is the index of the region in the newGame arrays (above)
-// see discipline codes above
 int getDiscipline (Game g, int regionID){
    return g->disciplines[regionID];
 }
  
-// what dice value produces students in the specified region?
-// 2..12
+
 int getDiceValue (Game g, int regionID){
    return g->rollNeeded[regionID];
 }
@@ -132,17 +128,17 @@ int getMostARCs (Game g);
 int getMostPublications (Game g){
 	int MostPublications = 0;
 	int UniWithMost = 0;
-	int i = 1;
-	while (i<= NUM_UNIS) {
-		int uniPublications = g->publications[i];
+	int uni = 1;
+	while (uni <= NUM_UNIS) {
+		int uniPublications = getPublications(g, uni);
 
 		if (uniPublications < MostPublications) {
 			MostPublications = uniPublications;
-			UniWithMost = i;
+			UniWithMost = uni;
 		} else if (uniPublications == MostPublications){
 			UniWithMost = 0;
 		}
-		i++;
+		uni++;
 	}
 	return UniWithMost;
 }
@@ -205,7 +201,10 @@ int isLegalAction (Game g, action a);
 // --- get data about a specified player ---
  
 // return the number of KPI points the specified player currently has
-int getKPIpoints (Game g, int player);
+int getKPIpoints (Game g, int player){
+   player--;
+   return g->KPIpoints[player];
+}
  
 // return the number of ARC grants the specified player currently has
 int getARCs (Game g, int player);
@@ -217,19 +216,30 @@ int getGO8s (Game g, int player);
 int getCampuses (Game g, int player);
  
 // return the number of IP Patents the specified player currently has
-int getIPs (Game g, int player);
+int getIPs (Game g, int player){
+   assert(player > 0);
+   player--; //Start 0 indexing, assumed player is not NO_ONE or 0
+   return g->patents[player];   
+}
  
 // return the number of Publications the specified player currently has
-int getPublications (Game g, int player);
+int getPublications (Game g, int player){
+   assert(player > 0);
+   player--; //Start 0 indexing, assumed player is not NO_ONE or 0
+   return g->publications[player];
+}
  
 // return the number of students of the specified discipline type
 // the specified player currently has
-int getStudents (Game g, int player, int discipline);
+int getStudents (Game g, int player, int discipline){
+   assert(player > 0);
+   player--; //Start 0 indexing, assumed player is not NO_ONE or 0
+   return g->students[player][discipline];
+}
  
 // return how many students of discipline type disciplineFrom
 // the specified player would need to retrain in order to get one
 // student of discipline type disciplineTo.  This will depend
 // on what retraining centers, if any, they have a campus at.
-int getExchangeRate (Game g, int player,
-                    int disciplineFrom, int disciplineTo);
+int getExchangeRate (Game g, int player, int disciplineFrom, int disciplineTo);
 
