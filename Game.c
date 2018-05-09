@@ -30,6 +30,9 @@ typedef struct _game {
     int currentRoll;
     int verticalArcs[NUM_VERTICAL_ARCS];
     int angledArcs[NUM_ANGLED_ARCS];
+
+    int mostPublications;
+    int mostARCs;
 } game;
  
 
@@ -38,7 +41,11 @@ Game newGame (int discipline[], int dice[]){
    Game g = malloc(sizeof(game));//Mallocs the game, we gotta find a way to clear this.
    memcpy(g->disciplines, discipline, NUM_OF_HEXAGONS);
    memcpy(g->rollNeeded, dice, NUM_OF_HEXAGONS);
+
    g->turnCount = -1;
+   g->mostPublications = NO_ONE;
+   g->mostARCs = NO_ONE;
+
    return g;
 }
  
@@ -121,13 +128,28 @@ int getDiceValue (Game g, int regionID){
 // which university currently has the prestige award for the most ARCs?
 // this is NO_ONE until the first arc is purchased after the game
 // has started. 
-int getMostARCs (Game g);
+int getMostARCs (Game g){   
+   int UniWithMost = g->mostARCs;
+   int MostARCs = getARCs(g, UniWithMost);
+   int uni = 1;
+   while (uni <= NUM_UNIS) {
+      int uniARCs = getARCs(g, uni);
+
+      if (uniARCs < MostARCs) {
+         MostARCs = uniARCs;
+         UniWithMost = uni;
+      }
+      uni++;
+   }
+   g->mostARCs = UniWithMost;
+   return UniWithMost;
+}
  
 // which university currently has the prestige award for the most pubs?
 // this is NO_ONE until the first publication is made.
 int getMostPublications (Game g){
-	int MostPublications = 0;
-	int UniWithMost = 0;
+   int UniWithMost = g->mostPublications;
+	int MostPublications = getPublications(g, UniWithMost);
 	int uni = 1;
 	while (uni <= NUM_UNIS) {
 		int uniPublications = getPublications(g, uni);
@@ -135,11 +157,10 @@ int getMostPublications (Game g){
 		if (uniPublications < MostPublications) {
 			MostPublications = uniPublications;
 			UniWithMost = uni;
-		} else if (uniPublications == MostPublications){
-			UniWithMost = 0;
 		}
 		uni++;
 	}
+   g->mostPublications = UniWithMost;
 	return UniWithMost;
 }
  
