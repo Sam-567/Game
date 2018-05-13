@@ -18,6 +18,7 @@
 #include "Game.h"
 
 void exchangeStudents(Game g, int player, action a, int exchangeRate);
+int isLegalParamaters(action a);
 
 typedef struct _game {
     int disciplines[NUM_OF_HEXAGONS];
@@ -30,12 +31,11 @@ typedef struct _game {
     int currentRoll;
     int verticalArcs[NUM_VERTICAL_ARCS];
     int angledArcs[NUM_ANGLED_ARCS];
-    int getGO8s;
     int mostPublications;
     int mostARCs;
-    int GO8s;
-    int arcs;
-    int campuses;
+    int GO8s[NUM_UNIS];
+    int arcs[NUM_UNIS];
+    int campuses[NUM_UNIS];
 } game;
  
 
@@ -224,7 +224,12 @@ int getARC(Game g, path pathToEdge);
 // It is not legal for a player to make the moves OBTAIN_PUBLICATION
 // or OBTAIN_IP_PATENT (they can make the move START_SPINOFF)
 // you can assume that any pths passed in are NULL terminated strings.
-int isLegalAction (Game g, action a);
+/*int isLegalAction (Game g, action a){
+   
+
+
+}*/
+
  
 // --- get data about a specified player ---
  
@@ -285,8 +290,28 @@ int getExchangeRate (Game g, int player, int disciplineFrom, int disciplineTo){
 	if (disciplineFrom = STUDENT_MTV){
 		if( getCampus(g, "R")  == player || 
 		getCampus(g, "RR")
-	}
+   }
 }
+
 
 int hasCampus(Game g, int player, path location);
 
+int isLegalParamaters(action a) {
+   int c = 0;
+   int pass = FALSE;
+   if (a.actionCode >= 0 && a.actionCode <=7) {
+      if (a.actionCode == 1)   
+         if (a.disciplineFrom >= 0 && a.disciplineFrom <= 5){
+            if (a.disciplineTo >= 0 && a.disciplineTo <= 5) {
+               while (c <= PATH_LIMIT && a.destination[c] != '\0') {
+                  if ((a.destination[c] == 'L' || a.destination[c] == 'R'
+                      || a.destination[c] == 'B') && pass == TRUE) {
+                     pass = TRUE;
+                  } else {
+                     pass = FALSE;
+                  }
+               }
+            }
+         }
+      }
+   }
