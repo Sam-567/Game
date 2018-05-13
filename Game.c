@@ -3,55 +3,8 @@
 *  Filled in version of game.h
 */
  
-#define NUM_UNIS 3
- 
-// player ID of each university
-#define NO_ONE 0
-#define UNI_A 1
-#define UNI_B 2
-#define UNI_C 3
- 
-// contents of an ARC
-#define VACANT_ARC 0
-#define ARC_A 1
-#define ARC_B 2
-#define ARC_C 3
- 
-// contents of a VERTEX
-#define VACANT_VERTEX 0 
-#define CAMPUS_A 1
-#define CAMPUS_B 2
-#define CAMPUS_C 3
-#define GO8_A 4
-#define GO8_B 5
-#define GO8_C 6
- 
-// action codes
-#define PASS 0
-#define BUILD_CAMPUS 1
-#define BUILD_GO8 2
-#define OBTAIN_ARC 3
-#define START_SPINOFF 4
-#define OBTAIN_PUBLICATION 5
-#define OBTAIN_IP_PATENT 6
-#define RETRAIN_STUDENTS 7
- 
-// disciplines
-#define STUDENT_THD 0
-#define STUDENT_BPS 1
-#define STUDENT_BQN 2
-#define STUDENT_MJ  3
-#define STUDENT_MTV 4
-#define STUDENT_MMONEY 5
- 
-#define NUM_REGIONS 19
-#define PATH_LIMIT 150
- 
-#define TRUE 1
-#define FALSE 0
 
 #define NUM_OF_HEXAGONS 19
-#define NUM_PLAYERS 3
 #define NUM_DISCIPLINES 6
 #define NUM_ANGLED_ARCS 44
 #define NUM_VERTICAL_ARCS 24
@@ -62,101 +15,54 @@
 #include <malloc.h>
 #include <string.h>
 
+#include "Game.h"
 
-typedef struct _game * Game;
+void exchangeStudents(Game g, int player, action a, int exchangeRate);
+int isLegalParamaters(action a);
+int hasCampus(Game g, int player, path location);
 
 typedef struct _game {
     int disciplines[NUM_OF_HEXAGONS];
     int rollNeeded[NUM_OF_HEXAGONS];
     int turnCount;
-    int KPIpoints[NUM_PLAYERS];
-    int patents[NUM_PLAYERS];
-    int publications[NUM_PLAYERS];
-    int students[NUM_PLAYERS][NUM_DISCIPLINES];
+    int KPIpoints[NUM_UNIS];
+    int patents[NUM_UNIS];
+    int publications[NUM_UNIS];
+    int students[NUM_UNIS][NUM_DISCIPLINES];
     int currentRoll;
     int verticalArcs[NUM_VERTICAL_ARCS];
     int angledArcs[NUM_ANGLED_ARCS];
+    int mostPublications;
+    int mostARCs;
+    int GO8s[NUM_UNIS];
+    int arcs[NUM_UNIS];
+    int campuses[NUM_UNIS];
 } game;
-
-// This is a change to demonstrate GitHub
  
-// a path is a sequence of L=left R=right B=back steps
-// starting from the initial campus of player 1 / A at the top
-// of the map facing inwards represented as a string of length
-// PATH_LIMIT or less (including the terminating 0). 
-// a path can specify a vertex (the vertex at the end of the path)
-// and a path can specify an ARC (the last ARC in the path)
-// it is fine and legal for a path to not be the shortest path
-// to the destination, it can even contain loops if you like.
-// The length of a path (including the terminating 0) must never
-// exceed PATH_LIMIT.  Every edge in the path must lie on the
-// island, paths cannot include edges which are in the sea.
-typedef char path[PATH_LIMIT];
- 
-// actions are what the player AI returns.  They say the one thing
-// the AI wants to do next.  In the playGame logic you'll ask
-// a player for their next action, then you'll check it is a legal
-// action (using isLegalAction()), then you'll perform that action
-// for them (using makeAction()), then you'll ask the same player
-// for another action and repeat this over and over again until they
-// return PASS at which time you'll throw the dice (using
-// throwDice()) and advance the game to the next player.  And repeat.
-typedef struct _action {
-  int actionCode;  // see #defines above
-  path destination; // if the action operates on a vertex or ARC this
-                    // specifies *which* vertex or path.  unused
-                    // otherwise
-  int disciplineFrom;  // used for the retrain students action
-  int disciplineTo;    // used for the retrain students action
-} action;
- 
-/* **** Functions which change the game aka SETTERS **** */
-// make a new game, given the disciplines produced by each
-// region, and the value on the dice discs in each region.
-// note: each array must be NUM_REGIONS long
-// eg if you are using my sample game struct above this function
-// would need to set the field currentTurn to -1.  (because the turn
-// number is -1 at the start of the game)
-// the ordering of the regions is column by column left to right,
-// going from the top of each column to the bottom before moving
-// to the next column to the right.
-//
-// so to create the default game as shown on the badly drawn map:
-//
-/*
-#define DEFAULT_DISCIPLINES {STUDENT_BQN, STUDENT_MMONEY, STUDENT_MJ, \
-               STUDENT_MMONEY, STUDENT_MJ, STUDENT_BPS, STUDENT_MTV, \
-               STUDENT_MTV, STUDENT_BPS,STUDENT_MTV, STUDENT_BQN, \
-               STUDENT_MJ, STUDENT_BQN, STUDENT_THD, STUDENT_MJ, \
-               STUDENT_MMONEY, STUDENT_MTV, STUDENT_BQN, STUDENT_BPS}
-#define DEFAULT_DICE {9,10,8,12,6,5,3,11,3,11,4,6,4,7,9,2,8,10,5}
-*/
-//
-//   int disciplines[] = DEFAULT_DISCIPLINES;
-//   int dice[] = DEFAULT_DICE;
-//   Game g = newGame (disciplines, dice);
 
 Game newGame (int discipline[], int dice[]){
 
    Game g = malloc(sizeof(game));//Mallocs the game, we gotta find a way to clear this.
    memcpy(g->disciplines, discipline, NUM_OF_HEXAGONS);
    memcpy(g->rollNeeded, dice, NUM_OF_HEXAGONS);
+
    g->turnCount = -1;
+   g->mostPublications = NO_ONE;
+   g->mostARCs = NO_ONE;
+
    return g;
 }
  
-// free all the memory malloced for the game
 void disposeGame (Game g){
    free(g);
 }
  
-// make the specified action for the current player and update the
-// game state accordingly. 
-// The function may assume that the action requested is legal.
-// START_SPINOFF is not a legal action here
 void makeAction (Game g, action a){
-   
+   assert(isLegalAction (g, a) == TRUE);
+
    int move = a.actionCode;
+   int player = getWhoseTurn(g);
+   assert(player > 0);
 
    if (move == PASS){
 
@@ -178,52 +84,91 @@ void makeAction (Game g, action a){
    } else if (move == OBTAIN_IP_PATENT){
       
    } else if (move == RETRAIN_STUDENTS){
-      
+      int rate = getExchangeRate (g, player, a.disciplineFrom, a.disciplineTo);
+      exchangeStudents(g, player, a, rate);
    }
 }
- 
-// advance the game to the next turn,
-// assuming that the dice has just been rolled and produced diceScore
-// the game starts in turn -1 (we call this state "Terra Nullis") and
-// moves to turn 0 as soon as the first dice is thrown.
+
 void throwDice (Game g, int diceScore){
+   //Turning all MTV and M$ students to ThDs
+   if(diceScore == 7){
+      int i = 1;
+      while(i <= NUM_UNIS){
+         int numMMoney = g->students[i][STUDENT_MMONEY];
+         int numMTV = g->students[i][STUDENT_MTV];
+
+         g->students[i][STUDENT_THD] += numMTV + numMMoney;
+         g->students[i][STUDENT_MTV] = 0;
+         g->students[i][STUDENT_MMONEY] = 0;
+      }
+   }
    g->currentRoll = diceScore;
    g->turnCount++;
 }
- 
+
+//Exchange rate is the number of students for a discipline for 1 of another e.g. 3 means 3 students give 1 in return
+void exchangeStudents(Game g, int player, action a, int exchangeRate){
+   assert(a.actionCode == RETRAIN_STUDENTS);
+   int to = g->students[player][a.disciplineTo];
+   int from = g->students[player][a.disciplineFrom];
+   assert(from != STUDENT_THD);
+
+   while(to >= exchangeRate){
+      from++;
+      to -= exchangeRate;
+   }
+   g->students[player][a.disciplineTo] =  to;
+   g->students[player][a.disciplineFrom] = from;
+} 
 /* **** Functions which GET data about the game aka GETTERS **** */
  
-// what type of students are produced by the specified region?
-// regionID is the index of the region in the newGame arrays (above)
-// see discipline codes above
-int getDiscipline (Game g, int regionID);
+int getDiscipline (Game g, int regionID){
+	assert(regionID < NUM_OF_HEXAGONS);
+	return g->disciplines[regionID];
+}
  
-// what dice value produces students in the specified region?
-// 2..12
-int getDiceValue (Game g, int regionID);
+
+int getDiceValue (Game g, int regionID){
+	assert(regionID < NUM_OF_HEXAGONS);
+	return g->rollNeeded[regionID];
+}
  
 // which university currently has the prestige award for the most ARCs?
 // this is NO_ONE until the first arc is purchased after the game
 // has started. 
-int getMostARCs (Game g);
+int getMostARCs (Game g){   
+   int UniWithMost = g->mostARCs;
+   int MostARCs = getARCs(g, UniWithMost);
+   int uni = 1;
+   while (uni <= NUM_UNIS) {
+      int uniARCs = getARCs(g, uni);
+
+      if (uniARCs < MostARCs) {
+         MostARCs = uniARCs;
+         UniWithMost = uni;
+      }
+      uni++;
+   }
+   g->mostARCs = UniWithMost;
+   return UniWithMost;
+}
  
 // which university currently has the prestige award for the most pubs?
 // this is NO_ONE until the first publication is made.
 int getMostPublications (Game g){
-	int MostPublications = 0;
-	int UniWithMost = 0;
-	int i = 1;
-	while (i<= NUM_UNIS) {
-		int publications = publications[i];
+   int UniWithMost = g->mostPublications;
+	int MostPublications = getPublications(g, UniWithMost);
+	int uni = 1;
+	while (uni <= NUM_UNIS) {
+		int uniPublications = getPublications(g, uni);
 
-		if (publications < MostPublications) {
-			MostPublications = publications;
-			UniWithMost = i;
-		} else if (publications == MostPublications){
-			UniWithMost = 0;
+		if (uniPublications < MostPublications) {
+			MostPublications = uniPublications;
+			UniWithMost = uni;
 		}
-		i++;
+		uni++;
 	}
+   g->mostPublications = UniWithMost;
 	return UniWithMost;
 }
  
@@ -280,36 +225,141 @@ int getARC(Game g, path pathToEdge);
 // It is not legal for a player to make the moves OBTAIN_PUBLICATION
 // or OBTAIN_IP_PATENT (they can make the move START_SPINOFF)
 // you can assume that any pths passed in are NULL terminated strings.
-int isLegalAction (Game g, action a);
+int isLegalAction (Game g, action a){
+   int legality = FALSE;
+   if (isLegalParamaters(a) == TRUE) {
+      
+   }
+
+
+
+   return legality;
+}
+
  
 // --- get data about a specified player ---
  
 // return the number of KPI points the specified player currently has
-int getKPIpoints (Game g, int player);
+int getKPIpoints (Game g, int player){
+   player--;
+   return g->KPIpoints[player];
+}
  
 // return the number of ARC grants the specified player currently has
-int getARCs (Game g, int player);
+int getARCs (Game g, int player){
+   assert(player > 0);
+  return g->arcs[player-1];
+}
  
 // return the number of GO8 campuses the specified player currently has
-int getGO8s (Game g, int player);
+int getGO8s (Game g, int player){
+   assert(player > 0);
+   return g->GO8s[player-1];
+}
  
 // return the number of normal Campuses the specified player currently has
-int getCampuses (Game g, int player);
+int getCampuses (Game g, int player){
+	assert(player > 0);
+	return g->campuses[player-1];
+}
  
 // return the number of IP Patents the specified player currently has
-int getIPs (Game g, int player);
+int getIPs (Game g, int player){
+   assert(player > 0);
+   player--; //Start 0 indexing, assumed player is not NO_ONE or 0
+   return g->patents[player];   
+}
  
 // return the number of Publications the specified player currently has
-int getPublications (Game g, int player);
+int getPublications (Game g, int player){
+   assert(player > 0);
+   player--; //Start 0 indexing, assumed player is not NO_ONE or 0
+   return g->publications[player];
+}
  
 // return the number of students of the specified discipline type
 // the specified player currently has
-int getStudents (Game g, int player, int discipline);
+int getStudents (Game g, int player, int discipline){
+   assert(player > 0);
+   player--; //Start 0 indexing, assumed player is not NO_ONE or 0
+   return g->students[player][discipline];
+}
  
 // return how many students of discipline type disciplineFrom
 // the specified player would need to retrain in order to get one
 // student of discipline type disciplineTo.  This will depend
 // on what retraining centers, if any, they have a campus at.
-int getExchangeRate (Game g, int player,
-                    int disciplineFrom, int disciplineTo);
+int getExchangeRate (Game g, int player, int disciplineFrom, int disciplineTo){
+	assert(disciplineFrom != STUDENT_THD);
+	int exchangeRate = 3;
+	if (disciplineFrom == STUDENT_MTV) {
+		if( hasCampus(g, player, "R") ||hasCampus(g, player, "RR")) {
+			exchangeRate = 2;
+      }
+	} else if (disciplineFrom == STUDENT_MTV) {
+		if (hasCampus (g, player, "R") ){
+			exchangeRate = 2;
+		} else if (hasCampus (g, player, "RR") ) {
+			exchangeRate = 2;
+		}
+	} else if (disciplineFrom == STUDENT_MMONEY) {
+		if (hasCampus (g, player, "LR") ){
+			exchangeRate = 2;
+		} else if (hasCampus (g, player, "LRL") ) {
+			exchangeRate = 2;
+		}
+	} else if (disciplineFrom == STUDENT_BQN) {
+		if (hasCampus (g, player, "LRRLLRLR") ) {
+			exchangeRate = 2;
+		} else if (hasCampus (g, player, "LRRLLRLRR") ) {
+			exchangeRate = 2;
+		}
+	} else if (disciplineFrom == STUDENT_MJ) {
+		if (hasCampus (g, player, "LRRLLRLRRLRR") ) {
+			exchangeRate = 2;
+		} else if (hasCampus (g, player, "LRRLLRLRRLRRL") ) {
+			exchangeRate = 2;
+		}
+	} else if (disciplineFrom == STUDENT_BPS) {
+		if (hasCampus (g, player, "LRRLLRLRRLRRLRLRRL") ){
+			exchangeRate = 2;
+		} else if (hasCampus (g, player, "LRRLLRLRRLRRLRLRRLR") ) {
+			exchangeRate = 2;
+		}
+	}
+
+	return exchangeRate;
+}
+
+int hasCampus(Game g, int player, path location){
+	int result;
+	int campus = getCampus(g, location);
+	if(campus == player || campus == player + 3){
+		result = TRUE;
+	} else {
+		result = FALSE;
+	}
+	return result;
+}
+
+
+int isLegalParamaters(action a) {
+   int c = 0;
+   int pass = FALSE;
+   if (a.actionCode >= 0 && a.actionCode <=7) {
+         if (a.disciplineFrom >= 0 && a.disciplineFrom <= 5) {
+            if (a.disciplineTo >= 0 && a.disciplineTo <= 5) {
+               while (c <= PATH_LIMIT && a.destination[c] != '\0') {
+                  if ((a.destination[c] == 'L' || a.destination[c] == 'R'
+                      || a.destination[c] == 'B') && pass == TRUE) {
+                     pass = TRUE;
+                  } else {
+                     pass = FALSE;
+               }
+            }
+         }
+      }
+   }
+return pass;
+}
 
