@@ -108,6 +108,7 @@ void exchangeStudents(Game g, int player, action a, int exchangeRate){
    int to = g->students[player][a.disciplineTo];
    int from = g->students[player][a.disciplineFrom];
    assert(from != STUDENT_THD);
+
    while(to >= exchangeRate){
       from++;
       to -= exchangeRate;
@@ -266,6 +267,14 @@ int getStudents (Game g, int player, int discipline){
 // student of discipline type disciplineTo.  This will depend
 // on what retraining centers, if any, they have a campus at.
 int getExchangeRate (Game g, int player, int disciplineFrom, int disciplineTo){
+	assert(disciplineFrom != STUDENT_THD);
+	int exchangeRate = 3;
 
+	if (disciplineFrom = STUDENT_MTV){
+		if( getCampus(g, "R")  == player || 
+		getCampus(g, "RR")
+	}
 }
+
+int hasCampus(Game g, int player, path location);
 
