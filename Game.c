@@ -248,8 +248,8 @@ int getGO8s (Game g, int player){
  
 // return the number of normal Campuses the specified player currently has
 int getCampuses (Game g, int player){
-   assert(player > 0);
-return g->campuses[player-1];
+	assert(player > 0);
+	return g->campuses[player-1];
 }
  
 // return the number of IP Patents the specified player currently has
@@ -282,11 +282,49 @@ int getExchangeRate (Game g, int player, int disciplineFrom, int disciplineTo){
 	assert(disciplineFrom != STUDENT_THD);
 	int exchangeRate = 3;
 
-	if (disciplineFrom = STUDENT_MTV){
-		if( getCampus(g, "R")  == player || 
-		getCampus(g, "RR")
+	if (disciplineFrom = STUDENT_MTV) {
+		if (hasCampus (g, player, "R") ){
+			exchangeRate = 2;
+		} else if (hasCampus (g, player, "RR") ) {
+			exchangeRate = 2;
+		}
+	} else if (disciplineFrom == STUDENT_MMONEY) {
+		if (hasCampus (g, player, "LR") ){
+			exchangeRate = 2;
+		} else if (hasCampus (g, player, "LRL") ) {
+			exchangeRate = 2;
+		}
+	} else if (disciplineFrom == STUDENT_BQN) {
+		if (hasCampus (g, player, "LRRLLRLR") ) {
+			exchangeRate = 2;
+		} else if (hasCampus (g, player, "LRRLLRLRR") ) {
+			exchangeRate = 2;
+		}
+	} else if (disciplineFrom == STUDENT_MJ) {
+		if (hasCampus (g, player, "LRRLLRLRRLRR") ) {
+			exchangeRate = 2;
+		} else if (hasCampus (g, player, "LRRLLRLRRLRRL") ) {
+			exchangeRate = 2;
+		}
+	} else if (disciplineFrom == STUDENT_BPS) {
+		if (hasCampus (g, player, "LRRLLRLRRLRRLRLRRL") ){
+			exchangeRate = 2;
+		} else if (hasCampus (g, player, "LRRLLRLRRLRRLRLRRLR") ) {
+			exchangeRate = 2;
+		}
 	}
+
+	return exchangeRate;
 }
 
-int hasCampus(Game g, int player, path location);
+int hasCampus(Game g, int player, path location){
+	int result;
+	int campus getCampus(g, pathlocation);
+	if(campus == player || campus == player + 3){
+		result = TRUE;
+	} else {
+		result == FALSE;
+	}
+	return result;
+}
 
