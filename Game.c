@@ -228,11 +228,32 @@ int getARC(Game g, path pathToEdge);
 int isLegalAction (Game g, action a){
    int legality = FALSE;
    if (isLegalParamaters(a) == TRUE) {
-      
+      if (a.actionCode == PASS) {
+         // Check that player has enough resources
+         // 1x BPS, 1x B?, 1x MJ, 1x MTV
+
+         if 
+      } else if (a. actionCode == BUILD_CAMPUS) {
+
+      } else if (a.actionCode == BUILD_GO8) {
+
+      } else if (a.actionCode == OBTAIN_ARC) {
+
+      } else if (a.actionCode == START_SPINOFF) {
+
+      } else if (a.actionCode == OBTAIN_PUBLICATION) {
+
+      } else if (a.actionCode == OBTAIN_IP_PATENT) {
+
+      } else if (a.actionCode == RETRAIN_STUDENTS) {
+
+      }
    }
 
 
-
+   if (turnCount < 1) {
+      legality == FALSE;
+   }
    return legality;
 }
 
