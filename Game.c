@@ -19,6 +19,7 @@
 
 void exchangeStudents(Game g, int player, action a, int exchangeRate);
 int isLegalParamaters(action a);
+int hasCampus(Game g, int player, path location);
 
 typedef struct _game {
     int disciplines[NUM_OF_HEXAGONS];
@@ -224,11 +225,16 @@ int getARC(Game g, path pathToEdge);
 // It is not legal for a player to make the moves OBTAIN_PUBLICATION
 // or OBTAIN_IP_PATENT (they can make the move START_SPINOFF)
 // you can assume that any pths passed in are NULL terminated strings.
-/*int isLegalAction (Game g, action a){
-   
+int isLegalAction (Game g, action a){
+   int legality = FALSE;
+   if (isLegalParamaters(a) == TRUE) {
+      
+   }
 
 
-}*/
+
+   return legality;
+}
 
  
 // --- get data about a specified player ---
@@ -286,15 +292,27 @@ int getStudents (Game g, int player, int discipline){
 int getExchangeRate (Game g, int player, int disciplineFrom, int disciplineTo){
 	assert(disciplineFrom != STUDENT_THD);
 	int exchangeRate = 3;
-
-	if (disciplineFrom = STUDENT_MTV){
+	if (disciplineFrom == STUDENT_MTV) {
 		if( getCampus(g, "R")  == player || 
-		getCampus(g, "RR")
-   }
+		getCampus(g, "RR")) {
+      }
 }
 
 
-int hasCampus(Game g, int player, path location);
+int hasCampus(Game g, int player, path location) {
+
+	if (disciplineFrom = STUDENT_MTV) {
+		if (hasCampus (g, player, "R") ){
+			exchangeRate = 2;
+		} else if (hasCampus (g, player, "RR") ) {
+			exchangeRate = 2;
+		}
+	} else if (disciplineFrom == STUDENT_MMONEY) {
+		if (hasCampus (g, player, "LR") ){
+			exchangeRate = 2;
+		} else if (hasCampus (g, player, "LRL") ) {
+			exchangeRate = 2;
+		}
 	} else if (disciplineFrom == STUDENT_BQN) {
 		if (hasCampus (g, player, "LRRLLRLR") ) {
 			exchangeRate = 2;
@@ -328,14 +346,13 @@ int hasCampus(Game g, int player, path location){
 	}
 	return result;
 }
->>>>>>> 5afe961a215a771db4b6eaaf5bd2d5f470c528ff
+
 
 int isLegalParamaters(action a) {
    int c = 0;
    int pass = FALSE;
    if (a.actionCode >= 0 && a.actionCode <=7) {
-      if (a.actionCode == 1)   
-         if (a.disciplineFrom >= 0 && a.disciplineFrom <= 5){
+         if (a.disciplineFrom >= 0 && a.disciplineFrom <= 5) {
             if (a.disciplineTo >= 0 && a.disciplineTo <= 5) {
                while (c <= PATH_LIMIT && a.destination[c] != '\0') {
                   if ((a.destination[c] == 'L' || a.destination[c] == 'R'
@@ -343,9 +360,11 @@ int isLegalParamaters(action a) {
                      pass = TRUE;
                   } else {
                      pass = FALSE;
-                  }
                }
             }
          }
       }
    }
+return pass;
+}
+
