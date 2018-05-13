@@ -253,8 +253,8 @@ int getGO8s (Game g, int player){
  
 // return the number of normal Campuses the specified player currently has
 int getCampuses (Game g, int player){
-   assert(player > 0);
-return g->campuses[player-1];
+	assert(player > 0);
+	return g->campuses[player-1];
 }
  
 // return the number of IP Patents the specified player currently has
@@ -295,6 +295,40 @@ int getExchangeRate (Game g, int player, int disciplineFrom, int disciplineTo){
 
 
 int hasCampus(Game g, int player, path location);
+	} else if (disciplineFrom == STUDENT_BQN) {
+		if (hasCampus (g, player, "LRRLLRLR") ) {
+			exchangeRate = 2;
+		} else if (hasCampus (g, player, "LRRLLRLRR") ) {
+			exchangeRate = 2;
+		}
+	} else if (disciplineFrom == STUDENT_MJ) {
+		if (hasCampus (g, player, "LRRLLRLRRLRR") ) {
+			exchangeRate = 2;
+		} else if (hasCampus (g, player, "LRRLLRLRRLRRL") ) {
+			exchangeRate = 2;
+		}
+	} else if (disciplineFrom == STUDENT_BPS) {
+		if (hasCampus (g, player, "LRRLLRLRRLRRLRLRRL") ){
+			exchangeRate = 2;
+		} else if (hasCampus (g, player, "LRRLLRLRRLRRLRLRRLR") ) {
+			exchangeRate = 2;
+		}
+	}
+
+	return exchangeRate;
+}
+
+int hasCampus(Game g, int player, path location){
+	int result;
+	int campus getCampus(g, pathlocation);
+	if(campus == player || campus == player + 3){
+		result = TRUE;
+	} else {
+		result == FALSE;
+	}
+	return result;
+}
+>>>>>>> 5afe961a215a771db4b6eaaf5bd2d5f470c528ff
 
 int isLegalParamaters(action a) {
    int c = 0;
