@@ -104,9 +104,10 @@ void throwDice (Game g, int diceScore){
 
 //Exchange rate is the number of students for a discipline for 1 of another e.g. 3 means 3 students give 1 in return
 void exchangeStudents(Game g, int player, action a, int exchangeRate){
-   assert(a.actionCode ==RETRAIN_STUDENTS);
+   assert(a.actionCode == RETRAIN_STUDENTS);
    int to = g->students[player][a.disciplineTo];
    int from = g->students[player][a.disciplineFrom];
+   assert(from != STUDENT_THD);
    while(to >= exchangeRate){
       from++;
       to -= exchangeRate;
@@ -117,12 +118,14 @@ void exchangeStudents(Game g, int player, action a, int exchangeRate){
 /* **** Functions which GET data about the game aka GETTERS **** */
  
 int getDiscipline (Game g, int regionID){
-   return g->disciplines[regionID];
+	assert(regionID < NUM_OF_HEXAGONS);
+	return g->disciplines[regionID];
 }
  
 
 int getDiceValue (Game g, int regionID){
-   return g->rollNeeded[regionID];
+	assert(regionID < NUM_OF_HEXAGONS);
+	return g->rollNeeded[regionID];
 }
  
 // which university currently has the prestige award for the most ARCs?
@@ -262,5 +265,7 @@ int getStudents (Game g, int player, int discipline){
 // the specified player would need to retrain in order to get one
 // student of discipline type disciplineTo.  This will depend
 // on what retraining centers, if any, they have a campus at.
-int getExchangeRate (Game g, int player, int disciplineFrom, int disciplineTo);
+int getExchangeRate (Game g, int player, int disciplineFrom, int disciplineTo){
+
+}
 
