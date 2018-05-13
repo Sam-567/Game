@@ -30,9 +30,12 @@ typedef struct _game {
     int currentRoll;
     int verticalArcs[NUM_VERTICAL_ARCS];
     int angledArcs[NUM_ANGLED_ARCS];
-
+    int getGO8s;
     int mostPublications;
     int mostARCs;
+    int GO8s;
+    int arcs;
+    int campuses;
 } game;
  
 
@@ -228,13 +231,22 @@ int getKPIpoints (Game g, int player){
 }
  
 // return the number of ARC grants the specified player currently has
-int getARCs (Game g, int player);
+int getARCs (Game g, int player){
+   assert(player > 0);
+  return g->arcs[player-1];
+}
  
 // return the number of GO8 campuses the specified player currently has
-int getGO8s (Game g, int player);
+int getGO8s (Game g, int player){
+   assert(player > 0);
+   return g->GO8s[player-1];
+}
  
 // return the number of normal Campuses the specified player currently has
-int getCampuses (Game g, int player);
+int getCampuses (Game g, int player){
+   assert(player > 0);
+return g->campuses[player-1];
+}
  
 // return the number of IP Patents the specified player currently has
 int getIPs (Game g, int player){
