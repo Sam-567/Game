@@ -293,15 +293,10 @@ int getExchangeRate (Game g, int player, int disciplineFrom, int disciplineTo){
 	assert(disciplineFrom != STUDENT_THD);
 	int exchangeRate = 3;
 	if (disciplineFrom == STUDENT_MTV) {
-		if( getCampus(g, "R")  == player || 
-		getCampus(g, "RR")) {
+		if( hasCampus(g, player, "R") ||hasCampus(g, player, "RR")) {
+			exchangeRate = 2;
       }
-}
-
-
-int hasCampus(Game g, int player, path location) {
-
-	if (disciplineFrom = STUDENT_MTV) {
+	} else if (disciplineFrom == STUDENT_MTV) {
 		if (hasCampus (g, player, "R") ){
 			exchangeRate = 2;
 		} else if (hasCampus (g, player, "RR") ) {
@@ -338,11 +333,11 @@ int hasCampus(Game g, int player, path location) {
 
 int hasCampus(Game g, int player, path location){
 	int result;
-	int campus getCampus(g, pathlocation);
+	int campus = getCampus(g, location);
 	if(campus == player || campus == player + 3){
 		result = TRUE;
 	} else {
-		result == FALSE;
+		result = FALSE;
 	}
 	return result;
 }
