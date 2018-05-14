@@ -335,37 +335,24 @@ int getExchangeRate (Game g, int player, int disciplineFrom, int disciplineTo){
 	assert(disciplineFrom != STUDENT_THD);
 	int exchangeRate = 3;
 	if (disciplineFrom == STUDENT_MTV) {
-		if( hasCampus(g, player, "R") ||hasCampus(g, player, "RR")) {
+		if (hasCampus(g, player, "R") || hasCampus(g, player, "RR")) {
 			exchangeRate = 2;
       }
-	} else if (disciplineFrom == STUDENT_MTV) {
-		if (hasCampus (g, player, "R") ){
-			exchangeRate = 2;
-		} else if (hasCampus (g, player, "RR") ) {
-			exchangeRate = 2;
-		}
 	} else if (disciplineFrom == STUDENT_MMONEY) {
-		if (hasCampus (g, player, "LR") ){
-			exchangeRate = 2;
-		} else if (hasCampus (g, player, "LRL") ) {
+		if (hasCampus (g, player, "LR") || hasCampus (g, player, "LRL")) {
 			exchangeRate = 2;
 		}
 	} else if (disciplineFrom == STUDENT_BQN) {
-		if (hasCampus (g, player, "LRRLLRLR") ) {
-			exchangeRate = 2;
-		} else if (hasCampus (g, player, "LRRLLRLRR") ) {
+		if (hasCampus (g, player, "LRRLLRLR") || hasCampus (g, player, "LRRLLRLRR")) {
 			exchangeRate = 2;
 		}
 	} else if (disciplineFrom == STUDENT_MJ) {
-		if (hasCampus (g, player, "LRRLLRLRRLRR") ) {
-			exchangeRate = 2;
-		} else if (hasCampus (g, player, "LRRLLRLRRLRRL") ) {
+		if (hasCampus (g, player, "LRRLLRLRRLRR") || hasCampus (g, player, "LRRLLRLRRLRRL")) {
 			exchangeRate = 2;
 		}
 	} else if (disciplineFrom == STUDENT_BPS) {
-		if (hasCampus (g, player, "LRRLLRLRRLRRLRLRRL") ){
-			exchangeRate = 2;
-		} else if (hasCampus (g, player, "LRRLLRLRRLRRLRLRRLR") ) {
+		if (hasCampus (g, player, "LRRLLRLRRLRRLRLRRL") || 
+			hasCampus (g, player, "LRRLLRLRRLRRLRLRRLR")) {
 			exchangeRate = 2;
 		}
 	}
