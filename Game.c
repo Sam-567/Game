@@ -227,22 +227,43 @@ int getARC(Game g, path pathToEdge);
 // you can assume that any pths passed in are NULL terminated strings.
 int isLegalAction (Game g, action a){
    int legality = FALSE;
+   int player = getWhoseTurn(g); 
    if (isLegalParamaters(a) == TRUE) {
       if (a.actionCode == PASS) {
+
+      } else if (a. actionCode == BUILD_CAMPUS) {
          // Check that player has enough resources
          // 1x BPS, 1x B?, 1x MJ, 1x MTV
-
-         if 
-      } else if (a. actionCode == BUILD_CAMPUS) {
-
+         if (g->students[player][STUDENT_BPS] >= 1 &&
+             g->students[player][STUDENT_BQN] >= 1 &&
+             g->students[player][STUDENT_MJ]  >= 1 &&
+             g->students[player][STUDENT_MTV] >= 1 ){
+            
+         }
       } else if (a.actionCode == BUILD_GO8) {
-
+         // Check that the player has enough resources
+         // 2x MJ, 3x M$
+         if (g->students[player][STUDENT_MJ] >= 2 &&
+             g->students[player][STUDENT_MMONEY] >= 3 ){
+            
+         }
       } else if (a.actionCode == OBTAIN_ARC) {
-
+         // Check that the player has enough resources
+         // 1x B?, 1x BPS
+         if (g->students[player][STUDENT_BQN] >= 1 &&
+             g->students[player][STUDENT_BPS] >= 1 ){
+            
+         }
       } else if (a.actionCode == START_SPINOFF) {
-
+         // Check that the player has enough resources
+         // 1x MJ, 1x MTV, 1x M$
+         if (g->students[player][STUDENT_MJ]     >= 1 &&
+             g->students[player][STUDENT_MTV]    >= 1 &&
+             g->students[player][STUDENT_MMONEY] >= 1 ){
+            
+         }
       } else if (a.actionCode == OBTAIN_PUBLICATION) {
-
+            
       } else if (a.actionCode == OBTAIN_IP_PATENT) {
 
       } else if (a.actionCode == RETRAIN_STUDENTS) {
