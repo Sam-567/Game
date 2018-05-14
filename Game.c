@@ -1,8 +1,12 @@
-/*
-*  Game.c
-*  Filled in version of game.h
-*/
- 
+// Matthew Rossouw, Sam Chapman, Justin Lou, Mia Pahljina 
+// z5220299, *sam zid*, *justin zid*, *mia zid* (respectively)
+// HS1511, Queenwood Tute, Bryan Moh
+// 15/05/18
+// Game.c for KI
+
+// File that defines all features and functions for a Knowledge Island
+// game, implemented according to game.h. Designed to interface with a
+// Mechanical Turk
 
 #define NUM_OF_HEXAGONS 19
 #define NUM_DISCIPLINES 6
@@ -243,7 +247,7 @@ int isLegalAction (Game g, action a){
       } else if (a.actionCode == BUILD_GO8) {
          // Check that the player has enough resources
          // 2x MJ, 3x M$
-         if (g->students[player][STUDENT_MJ] >= 2 &&
+         if (g->students[player][STUDENT_MJ]     >= 2 &&
              g->students[player][STUDENT_MMONEY] >= 3 ){
             
          }
@@ -374,21 +378,21 @@ int hasCampus(Game g, int player, path location){
 
 int isLegalParamaters(action a) {
    int c = 0;
-   int pass = FALSE;
-   if (a.actionCode >= 0 && a.actionCode <=7) {
-         if (a.disciplineFrom >= 0 && a.disciplineFrom <= 5) {
-            if (a.disciplineTo >= 0 && a.disciplineTo <= 5) {
-               while (c <= PATH_LIMIT && a.destination[c] != '\0') {
-                  if ((a.destination[c] == 'L' || a.destination[c] == 'R'
-                      || a.destination[c] == 'B') && pass == TRUE) {
-                     pass = TRUE;
-                  } else {
-                     pass = FALSE;
-               }
-            }
-         }
+   int pass = TRUE;
+   if (a.actionCode <= 0 && a.actionCode >=7) {
+      pass = FALSE;
+   }
+   if (a.disciplineFrom <= 0 && a.disciplineFrom >= 5) {
+      pass = FALSE;
+   }
+   if (a.disciplineTo <= 0 && a.disciplineTo >= 5) {
+      pass = FALSE;
+   while (c <= PATH_LIMIT && a.destination[c] != '\0') {
+      if(( a.destination[c] != 'L' && a.destination[c] != 'R'
+        && a.destination[c] != 'B') && pass == TRUE) {
+         pass = FALSE;
       }
    }
-return pass;
+   return pass;
 }
 
