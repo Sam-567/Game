@@ -42,6 +42,10 @@ typedef struct _game {
     int arcs[NUM_UNIS];
     int campuses[NUM_UNIS];
 } game;
+  
+typedef struct _coordinate {
+
+}
  
 
 Game newGame (int discipline[], int dice[]){
@@ -60,6 +64,7 @@ Game newGame (int discipline[], int dice[]){
 void disposeGame (Game g){
    free(g);
 }
+w
  
 void makeAction (Game g, action a){
    assert(isLegalAction (g, a) == TRUE);
@@ -208,8 +213,8 @@ int getARC(Game g, path pathToEdge);
 // player to make the specified action, FALSE otherwise.
 //
 // "legal" means everything is legal:
-//   * that the action code is a valid action code which is legal to
-//     be made at this time
+//   ////////* that the action code is a valid action code which is legal to
+//   ////////  be made at this time DONE
 //   * that any path is well formed and legal ie consisting only of
 //     the legal direction characters and of a legal length,
 //     and which does not leave the island into the sea at any stage.
@@ -233,23 +238,40 @@ int isLegalAction (Game g, action a){
    int legality = FALSE;
    int player = getWhoseTurn(g); 
    if (isLegalParamaters(a) == TRUE) {
+      
+      // If player wants to pass
       if (a.actionCode == PASS) {
+        legality = TRUE;
 
       } else if (a. actionCode == BUILD_CAMPUS) {
-         // Check that player has enough resources
+         // Check that player has enough resources to build Campus
          // 1x BPS, 1x B?, 1x MJ, 1x MTV
          if (g->students[player][STUDENT_BPS] >= 1 &&
              g->students[player][STUDENT_BQN] >= 1 &&
              g->students[player][STUDENT_MJ]  >= 1 &&
              g->students[player][STUDENT_MTV] >= 1 ){
-            
+
+            // Checks that the vertex below is vacant
+            if (getCampus(g, action.path) == VACANT_VERTEX) {
+              // !!! Can add another function here to check path validity !!!
+              
+              //Checks if the edge before this vertex is owned by the player
+              if (getARC(g, path) == (player)) {
+                legality = TRUE;
+              }
+            }
          }
       } else if (a.actionCode == BUILD_GO8) {
-         // Check that the player has enough resources
+         // Check that the player has enough resources tp upgrade
          // 2x MJ, 3x M$
          if (g->students[player][STUDENT_MJ]     >= 2 &&
              g->students[player][STUDENT_MMONEY] >= 3 ){
-            
+
+             //Checks that the vertice below is valid
+            if (getCampus(g, action.path) == (player)) {
+              legality = TRUE;
+              // Could add a line here to check path before, but i
+              // think this is redundant.
          }
       } else if (a.actionCode == OBTAIN_ARC) {
          // Check that the player has enough resources
