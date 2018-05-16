@@ -26,21 +26,25 @@ int isLegalParamaters(action a);
 int hasCampus(Game g, int player, path location);
 
 typedef struct _game {
-    int disciplines[NUM_OF_HEXAGONS];
+    int disciplines[NUM_OF_HEXAGONS];//What discipline each hex tile is
     int rollNeeded[NUM_OF_HEXAGONS];
-    int turnCount;
-    int KPIpoints[NUM_UNIS];
-    int patents[NUM_UNIS];
-    int publications[NUM_UNIS];
+    int turnCount;//Number of terms passed
+    int KPIpoints[NUM_UNIS];//The KPI points of each uni
+    int patents[NUM_UNIS];//The number of patents each uni has
+    int publications[NUM_UNIS];//The number of publications each uni has
     int students[NUM_UNIS][NUM_DISCIPLINES];
     int currentRoll;
-    int verticalArcs[NUM_VERTICAL_ARCS];
-    int angledArcs[NUM_ANGLED_ARCS];
-    int mostPublications;
-    int mostARCs;
-    int GO8s[NUM_UNIS];
-    int arcs[NUM_UNIS];
-    int campuses[NUM_UNIS];
+    int mostPublications;//Uni with the most publications
+    int mostARCs;//Uni with the most ARCs
+    int GO8s[NUM_UNIS];//The number of GO8s each uni has
+    int arcs[NUM_UNIS];//The number of arcs each uni has
+	int campuses[NUM_UNIS];//The number of campuses each uni has
+	int totalGO8s;//Total number of GO8s
+	int totalArcs;//Total number of arcs
+	int totalCampuses;//Total number of arcs
+	int GO8Locs[NUM_UNIS][totalGO8s];//Locations of the GO8s
+	int arcLocs[NUM_UNIS][totalArcs];//Locations of the arcs
+	int campusLocs[NUM_UNIS][totalArcs];//Locations of the arcs
 } game;
  
 
