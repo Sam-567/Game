@@ -67,13 +67,15 @@ void disposeGame (Game g){
  
 void makeAction (Game g, action a){
    assert(isLegalAction (g, a) == TRUE);
+   assert(a.actionCode != START_SPINOFF);
+   assert(isLegalAction (g, a));
 
    int move = a.actionCode;
    int player = getWhoseTurn(g);
    assert(player > 0);
 
    if (move == PASS){
-
+      throwDice();
    } else if (move == BUILD_CAMPUS){
       //g->destination
       
@@ -81,11 +83,7 @@ void makeAction (Game g, action a){
       
    } else if (move == OBTAIN_ARC){
       
-   } else if (move == START_SPINOFF){
-      
    } else if (move == OBTAIN_ARC){
-      
-   } else if (move == START_SPINOFF){
       
    } else if (move == OBTAIN_PUBLICATION){
       
