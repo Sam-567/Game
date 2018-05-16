@@ -26,20 +26,30 @@ int isLegalParamaters(action a);
 int hasCampus(Game g, int player, path location);
 
 typedef struct _game {
-    int disciplines[NUM_OF_HEXAGONS];
-    int rollNeeded[NUM_OF_HEXAGONS];
-    int turnCount;
-    int KPIpoints[NUM_UNIS];
-    int patents[NUM_UNIS];
-    int publications[NUM_UNIS];
-    int students[NUM_UNIS][NUM_DISCIPLINES];
-    int currentRoll;
-    int mostPublications;
-    int mostARCs;
-    int GO8s[NUM_UNIS];
-    int arcs[NUM_UNIS];
-    int campuses[NUM_UNIS];
+   int disciplines[NUM_OF_HEXAGONS];//What discipline each hex tile is
+   int rollNeeded[NUM_OF_HEXAGONS];
+   int turnCount;//Number of terms passed
+   int KPIpoints[NUM_UNIS];//The KPI points of each uni
+   int patents[NUM_UNIS];//The number of patents each uni has
+   int publications[NUM_UNIS];//The number of publications each uni has
+   int students[NUM_UNIS][NUM_DISCIPLINES];
+   int currentRoll;
+   int mostPublications;//Uni with the most publications
+   int mostARCs;//Uni with the most ARCs
+   int GO8s[NUM_UNIS];//The number of GO8s each uni has
+   int arcs[NUM_UNIS];//The number of arcs each uni has
+	int campuses[NUM_UNIS];//The number of campuses each uni has
+	int totalGO8s;//Total number of GO8s
+	int totalArcs;//Total number of arcs
+	int totalCampuses;//Total number of arcs
+	int GO8Locs[NUM_UNIS][totalGO8s];//Locations of the GO8s
+	int arcLocs[NUM_UNIS][totalArcs];//Locations of the arcs
+	int campusLocs[NUM_UNIS][totalArcs];//Locations of the arcs
 } game;
+  
+typedef struct _coordinate {
+
+}
  
 
 Game newGame (int discipline[], int dice[]){
@@ -62,6 +72,7 @@ Game newGame (int discipline[], int dice[]){
 void disposeGame (Game g){
    free(g);
 }
+w
  
 void makeAction (Game g, action a){
    assert(isLegalAction (g, a) == TRUE);
@@ -208,8 +219,8 @@ int getARC(Game g, path pathToEdge);
 // player to make the specified action, FALSE otherwise.
 //
 // "legal" means everything is legal:
-//   * that the action code is a valid action code which is legal to
-//     be made at this time
+//   ////////* that the action code is a valid action code which is legal to
+//   ////////  be made at this time DONE
 //   * that any path is well formed and legal ie consisting only of
 //     the legal direction characters and of a legal length,
 //     and which does not leave the island into the sea at any stage.
@@ -233,23 +244,40 @@ int isLegalAction (Game g, action a){
    int legality = FALSE;
    int player = getWhoseTurn(g); 
    if (isLegalParamaters(a) == TRUE) {
+      
+      // If player wants to pass
       if (a.actionCode == PASS) {
+        legality = TRUE;
 
       } else if (a. actionCode == BUILD_CAMPUS) {
-         // Check that player has enough resources
+         // Check that player has enough resources to build Campus
          // 1x BPS, 1x B?, 1x MJ, 1x MTV
          if (g->students[player][STUDENT_BPS] >= 1 &&
              g->students[player][STUDENT_BQN] >= 1 &&
              g->students[player][STUDENT_MJ]  >= 1 &&
              g->students[player][STUDENT_MTV] >= 1 ){
-            
+
+            // Checks that the vertex below is vacant
+            if (getCampus(g, action.path) == VACANT_VERTEX) {
+              // !!! Can add another function here to check path validity !!!
+              
+              //Checks if the edge before this vertex is owned by the player
+              if (getARC(g, path) == (player)) {
+                legality = TRUE;
+              }
+            }
          }
       } else if (a.actionCode == BUILD_GO8) {
-         // Check that the player has enough resources
+         // Check that the player has enough resources tp upgrade
          // 2x MJ, 3x M$
          if (g->students[player][STUDENT_MJ]     >= 2 &&
              g->students[player][STUDENT_MMONEY] >= 3 ){
-            
+
+             //Checks that the vertice below is valid
+            if (getCampus(g, action.path) == (player)) {
+              legality = TRUE;
+              // Could add a line here to check path before, but i
+              // think this is redundant.
          }
       } else if (a.actionCode == OBTAIN_ARC) {
          // Check that the player has enough resources
