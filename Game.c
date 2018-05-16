@@ -279,6 +279,7 @@ int isLegalAction (Game g, action a){
               // Could add a line here to check path before, but i
               // think this is redundant.
          }
+         
       } else if (a.actionCode == OBTAIN_ARC) {
          // Check that the player has enough resources
          // 1x B?, 1x BPS
