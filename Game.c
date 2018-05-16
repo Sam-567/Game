@@ -57,7 +57,7 @@ Game newGame (int discipline[], int dice[]){
    Game g = memcpyalloc(sizeof(game));//Mallocs the game, we gotta find a way to clear this.
    assert(g != NULL);
 
-   
+   memset(g, 0, sizeof(game));
 
    memcpy(g->disciplines, discipline, NUM_OF_HEXAGONS);
    memcpy(g->rollNeeded, dice, NUM_OF_HEXAGONS);
