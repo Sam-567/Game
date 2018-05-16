@@ -34,8 +34,6 @@ typedef struct _game {
     int publications[NUM_UNIS];
     int students[NUM_UNIS][NUM_DISCIPLINES];
     int currentRoll;
-    int verticalArcs[NUM_VERTICAL_ARCS];
-    int angledArcs[NUM_ANGLED_ARCS];
     int mostPublications;
     int mostARCs;
     int GO8s[NUM_UNIS];
@@ -46,7 +44,11 @@ typedef struct _game {
 
 Game newGame (int discipline[], int dice[]){
 
-   Game g = malloc(sizeof(game));//Mallocs the game, we gotta find a way to clear this.
+   Game g = memcpyalloc(sizeof(game));//Mallocs the game, we gotta find a way to clear this.
+   assert(g != NULL);
+
+   
+
    memcpy(g->disciplines, discipline, NUM_OF_HEXAGONS);
    memcpy(g->rollNeeded, dice, NUM_OF_HEXAGONS);
 
