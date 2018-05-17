@@ -26,6 +26,7 @@ void exchangeStudents(Game g, int player, action a, int exchangeRate);
 int isLegalParamaters(action a);
 int hasCampus(Game g, int player, path location);
 int prevARC(g, path);
+path coordToString(int coordinate);
 
 typedef struct _game {
   int disciplines[NUM_OF_HEXAGONS];   //What discipline each hex tile is
@@ -49,9 +50,7 @@ typedef struct _game {
   int campusLocs[NUM_UNIS][totalArcs];//Locations of the arcs
 } game;
   
-typedef struct _coordinate {
 
-}
  
 
 Game newGame (int discipline[], int dice[]){
@@ -139,6 +138,11 @@ void exchangeStudents(Game g, int player, action a, int exchangeRate){
 } 
 /* **** Functions which GET data about the game aka GETTERS **** */
  
+path coordToString(int coordinate) {
+  // Coordinates are stored 
+}
+
+
 int getDiscipline (Game g, int regionID){
 	assert(regionID < NUM_OF_HEXAGONS);
 	return g->disciplines[regionID];
@@ -217,6 +221,9 @@ int getCampus(Game g, path pathToVertex);
 // the contents of the given edge (ie ARC code or vacent ARC)
 int getARC(Game g, path pathToEdge) {
   int contents = VACANT_ARC;
+    if (insideMap(g, path) == TRUE) {
+
+    }
 
   // To be completed
 
@@ -296,7 +303,8 @@ int isLegalAction (Game g, action a){
              g->students[player][STUDENT_BPS] >= 1 ){
             if (getARC(g, path) == VACANT_ARC) {
               if (prevARC(g, path) == player) {
-                legality == TRUE;
+              legality == TRUE;
+              
               }
             }
          }
@@ -434,6 +442,7 @@ int isLegalParamaters(action a) {
         && a.destination[c] != 'B') && pass == TRUE) {
          pass = FALSE;
       }
+      c++;
    }
    return pass;
 }
@@ -445,4 +454,12 @@ int prevARC(game g, path ARC) {
   // the contents of the ARC before the very last one.
 
   return contents;
+}
+
+int insideMap (path toCheck) {
+  // Checks if a given path is inside of the map 
+  int inside = FALSE;
+
+
+  return inside;
 }
