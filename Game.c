@@ -50,6 +50,13 @@ typedef struct _game {
   int campusLocs[NUM_UNIS][totalArcs];//Locations of the arcs
 } game;
   
+typedef struct _coordinate {
+  // coordinates stored as a vertice number and a path leading to it.
+  // see diagram included on GitHub with this file
+  // e.g. a coordinate can be vertice 1, lead to by left path. 1 L
+  unsigned short vert;
+  unsigned char path;
+} coord;
 
  
 
