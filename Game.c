@@ -1,4 +1,4 @@
-// Matthew Rossouw, Sam Chapman, Justin Lou, Mia Pahljina 
+/ Matthew Rossouw, Sam Chapman, Justin Lou, Mia Pahljina 
 // z5220299, *sam zid*, *justin zid*, *mia zid* (respectively)
 // HS1511, Queenwood Tute, Bryan Moh
 // 15/05/18
@@ -12,6 +12,7 @@
 #define NUM_DISCIPLINES 6
 #define NUM_ANGLED_ARCS 44
 #define NUM_VERTICAL_ARCS 24
+#define VACANT_ARC 0
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -24,26 +25,27 @@
 void exchangeStudents(Game g, int player, action a, int exchangeRate);
 int isLegalParamaters(action a);
 int hasCampus(Game g, int player, path location);
+int prevARC(g, path);
 
 typedef struct _game {
-   int disciplines[NUM_OF_HEXAGONS];//What discipline each hex tile is
-   int rollNeeded[NUM_OF_HEXAGONS];
-   int turnCount;//Number of terms passed
-   int KPIpoints[NUM_UNIS];//The KPI points of each uni
-   int patents[NUM_UNIS];//The number of patents each uni has
-   int publications[NUM_UNIS];//The number of publications each uni has
-   int students[NUM_UNIS][NUM_DISCIPLINES];
-   int currentRoll;
-   int mostPublications;//Uni with the most publications
-   int mostARCs;//Uni with the most ARCs
-   int GO8s[NUM_UNIS];//The number of GO8s each uni has
-   int arcs[NUM_UNIS];//The number of arcs each uni has
-	int campuses[NUM_UNIS];//The number of campuses each uni has
-	int totalGO8s;//Total number of GO8s
-	int totalArcs;//Total number of arcs
-	int totalCampuses;//Total number of arcs
-	int GO8Locs[NUM_UNIS][totalGO8s];//Locations of the GO8s
-	int arcLocs[NUM_UNIS][totalArcs];//Locations of the arcs
+  int disciplines[NUM_OF_HEXAGONS];   //What discipline each hex tile is
+  int rollNeeded[NUM_OF_HEXAGONS];
+  int turnCount;                      //Number of terms passed
+  int KPIpoints[NUM_UNIS];            //The KPI points of each uni
+  int patents[NUM_UNIS];              //The number of patents each uni has
+  int publications[NUM_UNIS];         //The number of publications each uni has
+  int students[NUM_UNIS][NUM_DISCIPLINES];
+  int currentRoll;
+  int mostPublications;               //Uni with the most publications
+  int mostARCs;                       //Uni with the most ARCs
+  int GO8s[NUM_UNIS];                 //The number of GO8s each uni has
+  int arcs[NUM_UNIS];                 //The number of arcs each uni has
+	int campuses[NUM_UNIS];             //The number of campuses each uni has
+	int totalGO8s;                      //Total number of GO8s
+	int totalArcs;                      //Total number of arcs
+	int totalCampuses;                  //Total number of arcs
+	int GO8Locs[NUM_UNIS][totalGO8s];   //Locations of the GO8s
+	int arcLocs[NUM_UNIS][totalArcs];   //Locations of the arcs
 	int campusLocs[NUM_UNIS][totalArcs];//Locations of the arcs
 } game;
   
@@ -213,7 +215,14 @@ int getWhoseTurn (Game g){
 int getCampus(Game g, path pathToVertex);
  
 // the contents of the given edge (ie ARC code or vacent ARC)
-int getARC(Game g, path pathToEdge);
+int getARC(Game g, path pathToEdge) {
+  int contents = VACANT_ARC;
+
+  // To be completed
+
+
+  return contents;
+}
  
 // returns TRUE if it is legal for the current
 // player to make the specified action, FALSE otherwise.
@@ -285,7 +294,11 @@ int isLegalAction (Game g, action a){
          // 1x B?, 1x BPS
          if (g->students[player][STUDENT_BQN] >= 1 &&
              g->students[player][STUDENT_BPS] >= 1 ){
-            
+            if (getARC(g, path) == VACANT_ARC) {
+              if (prevARC(g, path) == player) {
+                legality == TRUE;
+              }
+            }
          }
       } else if (a.actionCode == START_SPINOFF) {
          // Check that the player has enough resources
@@ -425,3 +438,11 @@ int isLegalParamaters(action a) {
    return pass;
 }
 
+int prevARC(game g, path ARC) {
+  int contents = VACANT_ARC;
+
+  // This functions will inherit basically all of getARC(), just returns
+  // the contents of the ARC before the very last one.
+
+  return contents;
+}
