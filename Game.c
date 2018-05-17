@@ -40,13 +40,13 @@ typedef struct _game {
   int mostARCs;                       //Uni with the most ARCs
   int GO8s[NUM_UNIS];                 //The number of GO8s each uni has
   int arcs[NUM_UNIS];                 //The number of arcs each uni has
-	int campuses[NUM_UNIS];             //The number of campuses each uni has
-	int totalGO8s;                      //Total number of GO8s
-	int totalArcs;                      //Total number of arcs
-	int totalCampuses;                  //Total number of arcs
-	int GO8Locs[NUM_UNIS][totalGO8s];   //Locations of the GO8s
-	int arcLocs[NUM_UNIS][totalArcs];   //Locations of the arcs
-	int campusLocs[NUM_UNIS][totalArcs];//Locations of the arcs
+  int campuses[NUM_UNIS];             //The number of campuses each uni has
+  int totalGO8s;                      //Total number of GO8s
+  int totalArcs;                      //Total number of arcs
+  int totalCampuses;                  //Total number of arcs
+  int GO8Locs[NUM_UNIS][totalGO8s];   //Locations of the GO8s
+  int arcLocs[NUM_UNIS][totalArcs];   //Locations of the arcs
+  int campusLocs[NUM_UNIS][totalArcs];//Locations of the arcs
 } game;
   
 typedef struct _coordinate {
