@@ -13,6 +13,7 @@
 #define NUM_ANGLED_ARCS 44
 #define NUM_VERTICAL_ARCS 24
 #define VACANT_ARC 0
+#define NUM_OF_VERTICES 52
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -26,7 +27,7 @@ void exchangeStudents(Game g, int player, action a, int exchangeRate);
 int isLegalParamaters(action a);
 int hasCampus(Game g, int player, path location);
 int prevARC(g, path);
-path coordToString(int coordinate);
+path coordToString(game g, coord coordinate);
 
 typedef struct _game {
   int disciplines[NUM_OF_HEXAGONS];   //What discipline each hex tile is
@@ -56,9 +57,38 @@ typedef struct _coordinate {
   // e.g. a coordinate can be vertice 1, lead to by left path. 1 L
   unsigned short vert;
   unsigned char path;
-} coord;
+} Coord;
 
+typedef int hex;
+typedef struct _vertice {
+  unsigned int pos;
+  unsigned char disciplines[3]
+}
+
+typedef struct _map {
+  Hex hexagon[NUM_OF_HEXAGONS];
+  vertice corner[NUM_OF_VERTICES];
+} Map;
  
+Map newMap (Game g) {
+  Map m = memcpyalloc(sizeof(Map));
+  int i = 0;
+  int c = 0;
+
+  // Loading disciplines into hexagons
+  while (i < NUM_OF_HEXAGONS) {
+    m->hexagon[i] = getDiscipline(i);
+    i++;
+  }
+  i = 0;
+  while (i < NUM_OF_HEXAGONS) {
+    if (i == 1) {
+      while (c<)
+      m.vertice[0] = 
+    }
+  }
+
+}
 
 Game newGame (int discipline[], int dice[]){
 
@@ -80,7 +110,6 @@ Game newGame (int discipline[], int dice[]){
 void disposeGame (Game g){
    free(g);
 }
-w
  
 void makeAction (Game g, action a){
    assert(isLegalAction (g, a) == TRUE);
@@ -145,8 +174,9 @@ void exchangeStudents(Game g, int player, action a, int exchangeRate){
 } 
 /* **** Functions which GET data about the game aka GETTERS **** */
  
-path coordToString(int coordinate) {
-  // Coordinates are stored 
+path coordToString(game g, coord coordinate) {
+  // works out the best path to a coordinate first
+
 }
 
 
