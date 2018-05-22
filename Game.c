@@ -15,6 +15,7 @@
 #define VACANT_ARC 0
 #define NUM_OF_VERTICES 52
 
+
 #include <stdlib.h>
 #include <stdio.h>
 #include <assert.h>
@@ -50,25 +51,20 @@ typedef struct _game {
   int arcLocs[NUM_UNIS][totalArcs];   //Locations of the arcs
   int campusLocs[NUM_UNIS][totalArcs];//Locations of the arcs
 } game;
-  
-typedef struct _coordinate {
-  // coordinates stored as a vertice number and a path leading to it.
-  // see diagram included on GitHub with this file
-  // e.g. a coordinate can be vertice 1, lead to by left path. 1 L
-  unsigned short vert;
-  unsigned char path;
-} Coord;
 
-typedef int hex;
-typedef struct _vertice {
-  unsigned int pos;
-  unsigned char disciplines[3]
-}
+typedef struct _vertex *link; 
 
 typedef struct _map {
-  Hex hexagon[NUM_OF_HEXAGONS];
-  vertice corner[NUM_OF_VERTICES];
+   // hexagon stores an int between 1-5 for the discipline it stores
+   int hexagon[NUM_OF_HEXAGONS];
+   vertex vertice[NUM_OF_VERTICES];
 } Map;
+
+typedef struct _vertex {
+   int disciplines[3];
+   link paths[3];
+   // l,r,b
+} vertex;
  
 Map newMap (Game g) {
   Map m = memcpyalloc(sizeof(Map));
@@ -80,15 +76,32 @@ Map newMap (Game g) {
     m->hexagon[i] = getDiscipline(i);
     i++;
   }
-  i = 0;
-  while (i < NUM_OF_HEXAGONS) {
-    if (i == 1) {
-      while (c<)
-      m.vertice[0] = 
-    }
+
+  m->vertice[0].paths = [m|v[1], m|v[4], NULL];
+  m->vertice[0].disciplines = [m->hexagon[8], NULL, NULL];
+  m->vertice[1].paths = [NULL, m|v[5], m|v[1]];
+  m->vertice[1].disciplines = [m->hexagon[8], NULL, NULL];
+  m->vertice[2].paths = [m|v];
+  m->vertice[2].disciplines = [m->hexagon[4], NULL, NULL];
+  m->vertice[3].paths = [""];
+  m->vertice[3].disciplines = [m->hexagon[4], m->hexagon[8], NULL];
+  m->vertice[4].paths = ["LR"];
+  m->vertice[4].disciplines = [m->hexagon[8], m->hexagon[13], NULL];
+  m->vertice[5].paths = ["LRL"];
+  m->vertice[5].disciplines = [m->hexagon[13], NULL, NULL];
+  m->vertice[6].paths = ["RRLR"];
+  m->vertice[6].disciplines = [m->hexagon[1], NULL, NULL];
+  m->vertice[7].paths = ["RRL"];
+  m->vertice[7].disciplines = [m->hexagon[1], m->hexagon[4], NULL];
+  m->vertice[8].paths = ["RL"];
+  m->vertice[8].disciplines = [m->hexagon[8], m->hexagon[4], m->hexagon[9]];
+  m->vertice[9].paths = ["LRR"];
+  m->vertice[9].disciplines = [m->hexagon[8], m->hexagon[9], m->hexagon[13]];
+  
+
+
   }
 
-}
 
 Game newGame (int discipline[], int dice[]){
 
