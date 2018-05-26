@@ -123,9 +123,12 @@ void makeAction (Game g, action a){
    if (move == PASS){
       throwDice();
    } else if (move == BUILD_CAMPUS){
-      //g->destination
+      totalCampuses += 1;
+      campusLocs[player][totalCampuses] = g->destination;
       
    } else if (move == BUILD_GO8){
+      totalGO8s += 1;
+      GO8Locs[player][totalGO8s] = g->destination;
       
    } else if (move == OBTAIN_ARC){
       
