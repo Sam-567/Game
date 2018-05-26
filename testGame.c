@@ -59,8 +59,6 @@ void testTurn(void){
 }
 
 
-
-
 Game makeDefaultGame(void){
    int disciplines[] = DEFAULT_DISCIPLINES;
    int dice[] = DEFAULT_DICE;
@@ -68,4 +66,5 @@ Game makeDefaultGame(void){
    return g;
 }
 
+void 
 // HOW NEAT IS THIS RIGHT?

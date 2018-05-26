@@ -458,6 +458,8 @@ int getStudents (Game g, int player, int discipline){
 int getExchangeRate (Game g, int player, int disciplineFrom, int disciplineTo){
 	assert(disciplineFrom != STUDENT_THD);
 	int exchangeRate = 3;
+
+   //Check if a player has campuses at trading locations
 	if (disciplineFrom == STUDENT_MTV) {
 		if (hasCampus(g, player, "R") || hasCampus(g, player, "RR")) {
 			exchangeRate = 2;
