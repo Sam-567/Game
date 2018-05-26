@@ -129,6 +129,11 @@ Game newGame (int discipline[], int dice[]){
    g->mostPublications = NO_ONE;
    g->mostARCs = NO_ONE;
 
+   //These are -1 as 1 gets automatically added every thing they're called
+   g->totalGO8s = -1;
+   g->totalArcs = -1;
+   g->totalCampuses = -1;
+
    return g;
 }
  
@@ -148,14 +153,12 @@ void makeAction (Game g, action a){
    if (move == PASS){
       // DO NOTHING
    } else if (move == BUILD_CAMPUS){
-      totalCampuses += 1;
-      campusLocs[player][totalCampuses] = g->destination;
+      g->totalCampuses += 1;
+      g->campusLocs[player][totalCampuses] = g->destination;
       
    } else if (move == BUILD_GO8){
-      totalGO8s += 1;
-      GO8Locs[player][totalGO8s] = g->destination;
-      
-   } else if (move == OBTAIN_ARC){
+      g->totalGO8s += 1;
+      g->GO8Locs[player][totalGO8s] = g->destination;
       
    } else if (move == OBTAIN_ARC){
       
