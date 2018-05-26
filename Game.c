@@ -1,5 +1,5 @@
-/ Matthew Rossouw, Sam Chapman, Justin Lou, Mia Pahljina 
-// z5220299, *sam zid*, *justin zid*, *mia zid* (respectively)
+// Matthew Rossouw, Sam Chapman, Justin Lou, Mia Pahljina 
+// z5220299, z5218557, *justin zid*, *mia zid* (respectively)
 // HS1511, Queenwood Tute, Bryan Moh
 // 15/05/18
 // Game.c for KI
@@ -146,7 +146,7 @@ void makeAction (Game g, action a){
    assert(player > 0);
 
    if (move == PASS){
-      throwDice();
+      // DO NOTHING
    } else if (move == BUILD_CAMPUS){
       //g->destination
       
