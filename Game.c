@@ -1,5 +1,5 @@
-/ Matthew Rossouw, Sam Chapman, Justin Lou, Mia Pahljina 
-// z5220299, *sam zid*, *justin zid*, *mia zid* (respectively)
+// Matthew Rossouw, Sam Chapman, Justin Lou, Mia Pahljina 
+// z5220299, z5218557, *justin zid*, *mia zid* (respectively)
 // HS1511, Queenwood Tute, Bryan Moh
 // 15/05/18
 // Game.c for KI
@@ -14,6 +14,12 @@
 #define NUM_VERTICAL_ARCS 24
 #define VACANT_ARC 0
 #define NUM_OF_VERTICES 52
+#define ROW_1 3
+#define ROW_2 7
+#define ROW_3 12
+#define ROW_4 16
+#define ROW_5 19
+
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -27,7 +33,7 @@ void exchangeStudents(Game g, int player, action a, int exchangeRate);
 int isLegalParamaters(action a);
 int hasCampus(Game g, int player, path location);
 int prevARC(g, path);
-path coordToString(game g, coord coordinate);
+vertex pathTrace(path pathToCheck)
 
 typedef struct _game {
   int disciplines[NUM_OF_HEXAGONS];   //What discipline each hex tile is
@@ -50,25 +56,29 @@ typedef struct _game {
   int arcLocs[NUM_UNIS][totalArcs];   //Locations of the arcs
   int campusLocs[NUM_UNIS][totalArcs];//Locations of the arcs
 } game;
-  
-typedef struct _coordinate {
-  // coordinates stored as a vertice number and a path leading to it.
-  // see diagram included on GitHub with this file
-  // e.g. a coordinate can be vertice 1, lead to by left path. 1 L
-  unsigned short vert;
-  unsigned char path;
-} Coord;
 
-typedef int hex;
-typedef struct _vertice {
-  unsigned int pos;
-  unsigned char disciplines[3]
-}
+typedef struct _vertex *link; 
 
 typedef struct _map {
-  Hex hexagon[NUM_OF_HEXAGONS];
-  vertice corner[NUM_OF_VERTICES];
+   // hexagon stores an int between 1-5 for the discipline it stores
+   int hexagon[NUM_OF_HEXAGONS];
+   vertex vertice[NUM_OF_VERTICES];
 } Map;
+
+typedef struct _road {
+   char *origin;
+   int owner[NUM_OF_UNIS];
+} road;
+
+typedef struct _vertex {
+   int disciplines[3];
+   link paths[3];
+   int campus[NUM_OF_UNIS];
+   int roadL = 0;
+   int roadR = 0;
+   int roadD = 0;
+   // l,r,b
+} vertex;
  
 Map newMap (Game g) {
   Map m = memcpyalloc(sizeof(Map));
@@ -80,15 +90,30 @@ Map newMap (Game g) {
     m->hexagon[i] = getDiscipline(i);
     i++;
   }
-  i = 0;
-  while (i < NUM_OF_HEXAGONS) {
-    if (i == 1) {
-      while (c<)
-      m.vertice[0] = 
-    }
+
+  m->vertice[0].paths = [m|v[1], m|v[4], NULL];
+  m->vertice[0].disciplines = [m->hexagon[8], NULL, NULL];
+  m->vertice[1].paths = [NULL, m|v[5], m|v[1]];
+  m->vertice[1].disciplines = [m->hexagon[8], NULL, NULL];
+  m->vertice[2].paths = [m|v];
+  m->vertice[2].disciplines = [m->hexagon[4], NULL, NULL];
+
+  //DIFFERENT WAY
+
+   // first row
+   while(h<= ROW_ONE) {
+      v->disciplines = hexagon[i];
+      v = v.next;
+      i++
+   }
+   while (second row){
+      i = 
+   }
+
+
+
   }
 
-}
 
 Game newGame (int discipline[], int dice[]){
 
@@ -121,7 +146,7 @@ void makeAction (Game g, action a){
    assert(player > 0);
 
    if (move == PASS){
-      throwDice();
+      // DO NOTHING
    } else if (move == BUILD_CAMPUS){
       totalCampuses += 1;
       campusLocs[player][totalCampuses] = g->destination;
@@ -314,7 +339,7 @@ int isLegalAction (Game g, action a){
              g->students[player][STUDENT_MTV] >= 1 ){
 
             // Checks that the vertex below is vacant
-            if (getCampus(g, action.path) == VACANT_VERTEX) {
+            if (getCampus(g, a.path) == VACANT_VERTEX) {
               // !!! Can add another function here to check path validity !!!
               
               //Checks if the edge before this vertex is owned by the player
@@ -330,7 +355,7 @@ int isLegalAction (Game g, action a){
              g->students[player][STUDENT_MMONEY] >= 3 ){
 
              //Checks that the vertice below is valid
-            if (getCampus(g, action.path) == (player)) {
+            if (getCampus(g, a.path) == (player)) {
               legality = TRUE;
               // Could add a line here to check path before, but i
               // think this is redundant.
@@ -354,21 +379,29 @@ int isLegalAction (Game g, action a){
          if (g->students[player][STUDENT_MJ]     >= 1 &&
              g->students[player][STUDENT_MTV]    >= 1 &&
              g->students[player][STUDENT_MMONEY] >= 1 ){
-            
+             legality = TRUE;
          }
       } else if (a.actionCode == OBTAIN_PUBLICATION) {
-            
+         // isLegalAction is only called for player actions.
+         // players are never allowed to call this action 
+         legality = FALSE;
       } else if (a.actionCode == OBTAIN_IP_PATENT) {
-
+         // isLegalAction is only called for player actions.
+         // players are never allowed to call this action 
+         legality = FALSE;
       } else if (a.actionCode == RETRAIN_STUDENTS) {
-
+         // Checks that the player has enough students to 
+         // satisfy the exchange rate
+         if (g->students[player][a.disciplineFrom] >= 
+             getExchangeRate(g, player, a.disciplineFrom, a.disciplineTo)) {
+               legality = TRUE;
+         }
       }
    }
-
-
-   if (turnCount < 1) {
+   // Actions cannot be made before the game starts
+   if (turnCount < 1);
       legality == FALSE;
-   }
+
    return legality;
 }
 
@@ -428,6 +461,8 @@ int getStudents (Game g, int player, int discipline){
 int getExchangeRate (Game g, int player, int disciplineFrom, int disciplineTo){
 	assert(disciplineFrom != STUDENT_THD);
 	int exchangeRate = 3;
+
+   //Check if a player has campuses at trading locations
 	if (disciplineFrom == STUDENT_MTV) {
 		if (hasCampus(g, player, "R") || hasCampus(g, player, "RR")) {
 			exchangeRate = 2;
@@ -488,12 +523,18 @@ int isLegalParamaters(action a) {
 }
 
 int prevARC(game g, path ARC) {
-  int contents = VACANT_ARC;
-
-  // This functions will inherit basically all of getARC(), just returns
-  // the contents of the ARC before the very last one.
-
-  return contents;
+  int i = 0;
+  // Counts the length of the string
+  while (i < PATH_LIMIT && (ARC[i] == 'L' ||
+           ARC[i] == 'R' || ARC[i] == 'B')){
+      i++;
+   }
+   // May need to change the return to -1 if this doesn't account for
+   //  the NULL at the end of the string for some reason.
+   // This basically removes the last character from the string so it is
+   //  one less than the initial string - I.e. the previous ARC
+   ARC[i-2] = NULL;
+   return getARC(g, ARC);
 }
 
 int insideMap (path toCheck) {
@@ -502,4 +543,9 @@ int insideMap (path toCheck) {
 
 
   return inside;
+}
+
+vertex pathTrace(path pathToCheck) {
+   // Deploys a mechanical scout to follow a given path. Returns the vertex
+   // that it lands on. This is dependant on the pathing mechanics we code.
 }
