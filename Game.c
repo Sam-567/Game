@@ -165,7 +165,7 @@ void makeAction (Game g, action a){
       g->arcs[player] += 1;
       g->arcLocs[player][arcs[player]] = g->destination;
       
-   } else if (START_BUSINESS_SPINOFF){
+   } else if (move == START_SPINOFF){
       int rand = rand() % 2;
       //If rand is 0, give IP Patent. If not, give research publication
       if (rand == 0){
