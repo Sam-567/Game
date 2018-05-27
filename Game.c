@@ -150,7 +150,7 @@ void makeAction (Game g, action a){
    int player = getWhoseTurn(g);
    assert(player > 0);
 
-   //PLEASE NOTE: NONE OF THESE CURRENTLY USE THE NEW COORDINATE SYSTEM OR CHECK VALIDITY
+   //PLEASE NOTE: NONE OF THESE CURRENTLY USE THE NEW PATH SYSTEM OR CHECK VALIDITY
    if (move == PASS){
       // DO NOTHING
    } else if (move == BUILD_CAMPUS){
@@ -166,7 +166,7 @@ void makeAction (Game g, action a){
       g->arcLocs[player][arcs[player]] = g->destination;
       
    } else if (move == START_SPINOFF){
-      int rand = rand() % 2;
+      int rand = rand() % 3;
       //If rand is 0, give IP Patent. If not, give research publication
       if (rand == 0){
          g->patents[player] += 1;
