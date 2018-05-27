@@ -36,25 +36,25 @@ int prevARC(g, path);
 vertex pathTrace(path pathToCheck)
 
 typedef struct _game {
-  int disciplines[NUM_OF_HEXAGONS];   //What discipline each hex tile is
+  int disciplines[NUM_OF_HEXAGONS];                            //What discipline each hex tile is
   int rollNeeded[NUM_OF_HEXAGONS];
-  int turnCount;                      //Number of terms passed
-  int KPIpoints[NUM_UNIS];            //The KPI points of each uni
-  int patents[NUM_UNIS];              //The number of patents each uni has
-  int publications[NUM_UNIS];         //The number of publications each uni has
+  int turnCount;                                               //Number of terms passed
+  int KPIpoints[NUM_UNIS];                                     //The KPI points of each uni
+  int patents[NUM_UNIS];                                       //The number of patents each uni has
+  int publications[NUM_UNIS];                                  //The number of publications each uni has
   int students[NUM_UNIS][NUM_DISCIPLINES];
   int currentRoll;
-  int mostPublications;               //Uni with the most publications
-  int mostARCs;                       //Uni with the most ARCs
-  int GO8s[NUM_UNIS];                 //The number of GO8s each uni has
-  int arcs[NUM_UNIS];                 //The number of arcs each uni has
-  int campuses[NUM_UNIS];             //The number of campuses each uni has
-  int totalGO8s;                      //Total number of GO8s
-  int totalArcs;                      //Total number of arcs
-  int totalCampuses;                  //Total number of arcs
-  int GO8Locs[NUM_UNIS][totalGO8s];   //Locations of the GO8s
-  int arcLocs[NUM_UNIS][totalArcs];   //Locations of the arcs
-  int campusLocs[NUM_UNIS][totalArcs];//Locations of the arcs
+  int mostPublications;                                        //Uni with the most publications
+  int mostARCs;                                                //Uni with the most ARCs
+  int GO8s[NUM_UNIS];                                          //The number of GO8s each uni has
+  int arcs[NUM_UNIS];                                          //The number of arcs each uni has
+  int campuses[NUM_UNIS];                                      //The number of campuses each uni has
+  /*int totalGO8s;                                             //Total number of GO8s
+  int totalArcs;                                               //Total number of arcs
+  int totalCampuses;  */                                       //Total number of arcs
+  int GO8Locs[NUM_UNIS][NUM_OF_VERTICES];                      //Locations of the GO8s
+  int arcLocs[NUM_UNIS][NUM_ANGLED_ARCS + NUM_VERTICAL_ARCS];  //Locations of the arcs
+  int campusLocs[NUM_UNIS][NUM_OF_VERTICES];                   //Locations of the arcs
 } game;
 
 typedef struct _vertex *link; 
@@ -129,6 +129,11 @@ Game newGame (int discipline[], int dice[]){
    g->mostPublications = NO_ONE;
    g->mostARCs = NO_ONE;
 
+   //These are -1 as 1 gets automatically added every thing they're called
+   g->totalGO8s = -1;
+   g->totalArcs = -1;
+   g->totalCampuses = -1;
+
    return g;
 }
  
@@ -145,21 +150,31 @@ void makeAction (Game g, action a){
    int player = getWhoseTurn(g);
    assert(player > 0);
 
+   //PLEASE NOTE: NONE OF THESE CURRENTLY USE THE NEW COORDINATE SYSTEM OR CHECK VALIDITY
    if (move == PASS){
       // DO NOTHING
    } else if (move == BUILD_CAMPUS){
-      //g->destination
+      g->campuses[player] += 1;
+      g->campusLocs[player][campuses[player]] = g->destination;
       
    } else if (move == BUILD_GO8){
+      g->GO8s[player] += 1;
+      g->GO8Locs[player][GO8s[player]] = g->destination;
       
    } else if (move == OBTAIN_ARC){
+      g->arcs[player] += 1;
+      g->arcLocs[player][arcs[player]] = g->destination;
       
-   } else if (move == OBTAIN_ARC){
-      
-   } else if (move == OBTAIN_PUBLICATION){
-      
-   } else if (move == OBTAIN_IP_PATENT){
-      
+   } else if (move == START_SPINOFF){
+      int rand = rand() % 2;
+      //If rand is 0, give IP Patent. If not, give research publication
+      if (rand == 0){
+         g->patents[player] += 1;
+      } else{
+         g->publications[player] += 1;
+      }
+
+
    } else if (move == RETRAIN_STUDENTS){
       int rate = getExchangeRate (g, player, a.disciplineFrom, a.disciplineTo);
       exchangeStudents(g, player, a, rate);
