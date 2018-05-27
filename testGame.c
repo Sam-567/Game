@@ -14,16 +14,19 @@
 
 Game makeDefaultGame(void);
 void testTurn(void);
+void testCampus(void);
 
 int main (int argc, char *argv[]){
 
    printf("Starting Tests\n");
    testTurn();
+   testCampus();
    printf("\nAll tests passed!\n");
 
 	return EXIT_SUCCESS;
 }
 
+//Sam Test
 void testTurn(void){
 
    Game g = makeDefaultGame();
@@ -58,13 +61,43 @@ void testTurn(void){
    disposeGame(g);
 }
 
+//Sam - tests has campus and get campus
+void testCampus(void){
 
+   printf ("Testing campus functions")
+
+   Game g = makeDefaultGame();
+
+   action a;
+   a.actionCode = OBTAIN_ARC;
+   strcpy ("R", a.destination);
+   g.makeAction(g, a);
+
+   strcpy ("RL", a.destination);
+   g.makeAction(g, a);
+
+   a.actionCode = BUILD_CAMPUS;
+   g.makeAction(g, a);
+
+   assert (getCampus (g, "RL") == UNI_A);
+   assert (hasCampus (g, UNI_A, "RL") == TRUE);
+   assert (getCampus (g, "RLRL") == NO_ONE);
+   assert (getCampus (g, "") == UNI_A);
+   assert (getCampuses (g, UNI_A) == 3);
+
+   g.throwDice(g, 5);
+
+   assert()
+}
+
+//Sam Test
 Game makeDefaultGame(void){
    int disciplines[] = DEFAULT_DISCIPLINES;
    int dice[] = DEFAULT_DICE;
    Game g = newGame (disciplines, dice);
+   assert (g != NULL);
+   printf("Made a game");
    return g;
 }
 
-void 
 // HOW NEAT IS THIS RIGHT?
