@@ -129,11 +129,6 @@ Game newGame (int discipline[], int dice[]){
    g->mostPublications = NO_ONE;
    g->mostARCs = NO_ONE;
 
-   //These are -1 as 1 gets automatically added every thing they're called
-   g->totalGO8s = -1;
-   g->totalArcs = -1;
-   g->totalCampuses = -1;
-
    return g;
 }
  
