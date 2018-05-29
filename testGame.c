@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <assert.h>
+#include <string.h>
 #include "Game.h"
 
 
@@ -14,16 +15,22 @@
 
 Game makeDefaultGame(void);
 void testTurn(void);
+void testCampus(void);
 
 int main (int argc, char *argv[]){
 
    printf("Starting Tests\n");
    testTurn();
+   testCampus();
    printf("\nAll tests passed!\n");
 
 	return EXIT_SUCCESS;
 }
 
+//Tests get turn
+//Tests throwdice
+//Tests get whose turn
+//Sam Test
 void testTurn(void){
 
    Game g = makeDefaultGame();
@@ -59,12 +66,42 @@ void testTurn(void){
 }
 
 
+//Tests parts of makeAction
+//Tests parts of pathing
+//Sam - tests has campus and get campus as well as make
+void testCampus(void){
+
+   printf ("Testing campus functions");
+
+   Game g = makeDefaultGame();
+
+   action a;
+   a.actionCode = OBTAIN_ARC;
+   strcpy ("R", a.destination);
+   makeAction(g, a);
+
+   strcpy ("RL", a.destination);
+   makeAction(g, a);
+
+   a.actionCode = BUILD_CAMPUS;
+   makeAction(g, a);
+
+   assert (getCampus (g, "RL") == UNI_A);
+
+   //Only used for our Game.c
+   //assert (hasCampus (g, UNI_A, "RL") == TRUE);
+
+   assert (getCampus (g, "RLRL") == NO_ONE);
+   assert (getCampus (g, "") == UNI_A);
+   assert (getCampuses (g, UNI_A) == 3);
+}
+
+//Sam Test
 Game makeDefaultGame(void){
    int disciplines[] = DEFAULT_DISCIPLINES;
    int dice[] = DEFAULT_DICE;
    Game g = newGame (disciplines, dice);
+   assert (g != NULL);
+   printf("Made a game");
    return g;
 }
-
-void 
-// HOW NEAT IS THIS RIGHT?
